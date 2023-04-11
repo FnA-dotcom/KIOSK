@@ -2,18 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rovermd/splash.dart';
 
-//https://cors-anywhere.herokuapp.com/corsdemo
-//To get the responses from the API hit above URL and then press
-//Request temporary access to the demo server to give the access to
-//run the project any other platform like chrome or any
-// other device.
-
-//The problem is in server side configration that does not
-// ALLOW Cross-Origin Resource Sharing (CORS) to access
-// any api data from any other platform except mobile devices
-// not even emulators So I added this proxy but this is a
-//temprary solution only.
-
 void main() {
   runApp(const MyApp());
   configLoading();
