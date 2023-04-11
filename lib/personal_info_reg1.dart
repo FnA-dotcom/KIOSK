@@ -1,3 +1,7 @@
+
+import 'dart:ui';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -7,12 +11,15 @@ import 'package:rovermd/Model/ethnicity_race_model.dart';
 import 'package:rovermd/insurance_marketing_reg2.dart';
 import 'package:rovermd/login.dart';
 import 'package:rovermd/utility_methods.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 import 'Model/gender_model.dart';
 
+import 'package:virtual_keyboard_2/virtual_keyboard_2.dart';
+
 
 UtilityMethods utilityMethods = new UtilityMethods();
+
+
 class PersonalInfoRegister extends StatefulWidget {
   const PersonalInfoRegister({Key? key}) : super(key: key);
 
@@ -27,6 +34,9 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
 
   List<Ethnicity>? ethnicities;
   List<Race>? race;
+
+  TextEditingController _keyboardControllerText = TextEditingController();
+  bool keyBoardVisilityCheck = true;
 
   TextEditingController firstNameController = TextEditingController();
   TextEditingController middleInitialController = TextEditingController();
@@ -45,8 +55,6 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
   TextEditingController reasonVsitController = TextEditingController();
 
   final FocusNode firstNameFocusNode = FocusNode();
-  final ScrollController firstNameScrollController = ScrollController();
-
   final FocusNode lastNameFocusNode = FocusNode();
   final FocusNode dobFocusNode = FocusNode();
   final FocusNode sexFocusNode = FocusNode();
@@ -63,6 +71,11 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
       filter: { "#": RegExp(r'[0-9]') },
       type: MaskAutoCompletionType.lazy
   );
+
+  // @override
+  // void dispose() {
+  //   firstNameFocusNode.dispose();
+  // }
 
   @override
   void initState() {
@@ -84,13 +97,17 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
       });
     });
 
-    // firstNameFocusNode.addListener(() {
-    //   if (firstNameFocusNode.hasFocus) {
-    //     KeyboardVisibilityController().focus(firstNameFocusNode);
-    //   }
-    // });
 
   }
+
+  // void virtualKeyboard(TextEditingController _controllerText){
+  //    VirtualKeyboard(
+  //       height: 300,
+  //       textColor: Colors.white,
+  //       type: VirtualKeyboardType.Alphanumeric,
+  //       textController: _controllerText
+  //   );
+  // }
 
   showSexTypeDialog(BuildContext context){
     showDialog(
@@ -545,11 +562,13 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
   }
 
 
-
-
+  void showKeyboard() {
+    SystemChannels.textInput.invokeMethod('firstNameFocusNode.show');
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
       onWillPop: showExitPopup,
         child: Scaffold(
@@ -618,7 +637,7 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
                     child: Text("Powered By RoverMD",
                       style: TextStyle(
                         // color: Color(0xFFC0C0C0),
-                        fontSize: 16.0
+                          fontSize: 16.0
                       ),
                     ),
                   ),
@@ -705,12 +724,12 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
                                 shadowColor: Colors.transparent,
                                 elevation: 0,
                                 textStyle: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black
                                 ))))),
               ],
-            )
+            ),
           ),
           body: Container(
             // alignment: Alignment.center,
@@ -726,310 +745,334 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
                   ],
                 )
             ),
-            child: ListView(
-              shrinkWrap: true,
+            child: Column(
               children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: firstNameController,
-                      focusNode: firstNameFocusNode,
-                      scrollController: firstNameScrollController,
-                      // autofocus: true,
-                      decoration: InputDecoration(
-                          labelText: 'First Name',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: <Widget>[
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: firstNameController,
+                            focusNode: firstNameFocusNode,
+                            onTap: (){
+                              setState(() {
+                                _keyboardControllerText = firstNameController;
+                              });
+                            },
+                            decoration: InputDecoration(
+                                labelText: 'First Name',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
 
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.red, width: 2.0))
-                      ),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.red, width: 2.0))
+                            ),
 
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: middleInitialController,
-                      decoration: InputDecoration(
-                          labelText: 'Middle Initial',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.grey, width: 1.0))
+                          )
                       ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: lastNameController,
-                      focusNode: lastNameFocusNode,
-                      decoration: InputDecoration(
-                          labelText: 'Last Name',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.red, width: 2.0))
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: middleInitialController,
+                            decoration: InputDecoration(
+                                labelText: 'Middle Initial',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.grey, width: 1.0))
+                            ),
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: lastNameController,
+                            focusNode: lastNameFocusNode,
+                            decoration: InputDecoration(
+                                labelText: 'Last Name',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.red, width: 2.0))
+                            ),
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            readOnly: true,
+                            controller: dobController,
+                            focusNode: dobFocusNode,
+                            decoration: InputDecoration(
+                                labelText: 'Date of Birth',
+                                prefixIcon: Icon(Icons.calendar_month),
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.red, width: 2.0))
+                            ),
+                            onTap: () async{
+                              String formattedDob = "";
+                              DateTime? dob = await showDatePicker(
+                                  context: context, //context of current state
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(1900), //DateTime.now() - not to allow to choose before today.
+                                  lastDate: DateTime(2101));
+                              if(dob != null){
+                                formattedDob = DateFormat('MM/dd/yyyy').format(dob);
+                              }
+                              dobController.text = formattedDob;
+                            },
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            readOnly: true,
+                            controller: sexController,
+                            focusNode: sexFocusNode,
+                            decoration: InputDecoration(
+                                labelText: 'Sex',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.red, width: 2.0))
+                            ),
+                            onTap: (){
+                              showSexTypeDialog(context);
+                            },
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: phoneNoController,
+                            focusNode: phoneNoFocusNode,
+                            keyboardType: TextInputType.phone,
+                            autocorrect: false,
+                            inputFormatters: [
+                              phoneNoMaskFormatter
+                            ],
+                            decoration: InputDecoration(
+                                labelText: 'Phone',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.red, width: 2.0))
+                            ),
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: streetAddController,
+                            decoration: InputDecoration(
+                                labelText: 'Street Address',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.grey, width: 1.0))
+                            ),
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: cityController,
+                            decoration: InputDecoration(
+                                labelText: 'City',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.grey, width: 1.0))
+                            ),
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: stateController,
+                            decoration: InputDecoration(
+                                labelText: 'State',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.grey, width: 1.0))
+                            ),
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: zipCodeController,
+                            decoration: InputDecoration(
+                                labelText: 'Zip Code',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.grey, width: 1.0))
+                            ),
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Container(
+                            color: Colors.white,
+                            child: TextFormField(
+                              readOnly: true,
+                              controller: ethController,
+                              decoration: InputDecoration(
+                                  labelText: 'Ethnicity',
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  labelStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14.0),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      borderSide: new BorderSide(
+                                          color: Colors.grey, width: 1.0))
+                              ),
+                              onTap: (){
+                                EasyLoading.show(status: 'loading...');
+                                _showEthDialog(context);
+                              },
+                            ) ,
+                          )
                       ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      readOnly: true,
-                      controller: dobController,
-                      focusNode: dobFocusNode,
-                      decoration: InputDecoration(
-                          labelText: 'Date of Birth',
-                          prefixIcon: Icon(Icons.calendar_month),
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.red, width: 2.0))
-                      ),
-                      onTap: () async{
-                        String formattedDob = "";
-                        DateTime? dob = await showDatePicker(
-                            context: context, //context of current state
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(1900), //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2101));
-                        if(dob != null){
-                          formattedDob = DateFormat('MM/dd/yyyy').format(dob);
-                        }
-                        dobController.text = formattedDob;
-                      },
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      readOnly: true,
-                      controller: sexController,
-                      focusNode: sexFocusNode,
-                      decoration: InputDecoration(
-                          labelText: 'Sex',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.red, width: 2.0))
-                      ),
-                      onTap: (){
-                        showSexTypeDialog(context);
-                      },
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: phoneNoController,
-                      focusNode: phoneNoFocusNode,
-                      keyboardType: TextInputType.phone,
-                      autocorrect: false,
-                      inputFormatters: [
-                        phoneNoMaskFormatter
-                      ],
-                      decoration: InputDecoration(
-                          labelText: 'Phone',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.red, width: 2.0))
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: streetAddController,
-                      decoration: InputDecoration(
-                          labelText: 'Street Address',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.grey, width: 1.0))
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: cityController,
-                      decoration: InputDecoration(
-                          labelText: 'City',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.grey, width: 1.0))
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: stateController,
-                      decoration: InputDecoration(
-                          labelText: 'State',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.grey, width: 1.0))
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: zipCodeController,
-                      decoration: InputDecoration(
-                          labelText: 'Zip Code',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.grey, width: 1.0))
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Container(
-                      color: Colors.white,
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: ethController,
-                        decoration: InputDecoration(
-                            labelText: 'Ethnicity',
-                            fillColor: Colors.white,
-                            filled: true,
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14.0),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                borderSide: new BorderSide(
-                                    color: Colors.grey, width: 1.0))
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Container(
+                            color: Colors.white,
+                            child: TextFormField(
+                              readOnly: true,
+                              controller: raceController,
+                              decoration: InputDecoration(
+                                  labelText: 'Race',
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  labelStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14.0),
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      borderSide: new BorderSide(
+                                          color: Colors.grey, width: 1.0))
+                              ),
+                              onTap: (){
+                                EasyLoading.show(status: 'loading...');
+                                _showRaceDialog(context);
+                              },
+                            )
                         ),
-                        onTap: (){
-                          EasyLoading.show(status: 'loading...');
-                          _showEthDialog(context);
-                        },
-                      ) ,
-                    )
+                      ),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            readOnly: true,
+                            controller: reasonVsitController,
+                            focusNode: reasonVsitFocusNode,
+                            decoration: InputDecoration(
+                                labelText: 'Reason for Visit',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.red, width: 2.0))
+                            ),
+                            onTap: (){
+                              showReasonVisitDialog(context);
+                            },
+                          )),
+                      Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: specifyReasonController,
+                            focusNode: specifyReasonFocusNode,
+                            decoration: InputDecoration(
+                                labelText: 'Specify Reason',
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14.0),
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    borderSide: new BorderSide(
+                                        color: Colors.red, width: 2.0))
+                            ),
+                          )
+                      ),
+
+                    ],
+                  ),
                 ),
-                Padding(
+                Visibility(
+                  visible: keyBoardVisilityCheck,
+                  child:Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Container(
-                      color: Colors.white,
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: raceController,
-                        decoration: InputDecoration(
-                            labelText: 'Race',
-                            fillColor: Colors.white,
-                            filled: true,
-                            labelStyle: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14.0),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                borderSide: new BorderSide(
-                                    color: Colors.grey, width: 1.0))
-                        ),
-                        onTap: (){
-                          EasyLoading.show(status: 'loading...');
-                          _showRaceDialog(context);
-                        },
-                      )
+                        color: Colors.deepPurple,
+                        child: VirtualKeyboard(
+                          height: 300,
+                          textColor: Colors.white,
+                          type: VirtualKeyboardType.Alphanumeric,
+                          textController: _keyboardControllerText,
+                        )
                     ),
-                ),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      readOnly: true,
-                      controller: reasonVsitController,
-                      focusNode: reasonVsitFocusNode,
-                      decoration: InputDecoration(
-                          labelText: 'Reason for Visit',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.red, width: 2.0))
-                      ),
-                      onTap: (){
-                        showReasonVisitDialog(context);
-                      },
-                    )),
-                Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: TextFormField(
-                      controller: specifyReasonController,
-                      focusNode: specifyReasonFocusNode,
-                      decoration: InputDecoration(
-                          labelText: 'Specify Reason',
-                          fillColor: Colors.white,
-                          filled: true,
-                          labelStyle: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              borderSide: new BorderSide(
-                                  color: Colors.red, width: 2.0))
-                      ),
-                    )),
+                  )
+                )
+
               ],
             )
-            // Stack(
-            //   children: <Widget>[
-            //
-            //   ],
-            // ),
+
           )
         )
     );
