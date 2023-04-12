@@ -7,9 +7,22 @@ import 'package:rovermd/Model/ethnicity_race_model.dart';
 import 'package:rovermd/Model/gender_model.dart';
 import 'package:rovermd/Model/pri_insurance_model.dart';
 
+//Use this URL Below TO give the temporary access to the HTTP Request
+//https://cors-anywhere.herokuapp.com/corsdemo
+
+//The problem is in server side that it does not allow request to pass through
+//Cross-Origin Resource Sharing (CORS).
+// CORS (Cross-Origin Resource Sharing) error. This occurs
+// when the app attempts to make a request to a different domain t
+// han the one that served the app. Chrome is more strict in enforcing
+// CORS policies than Android, which could explain why the issue only
+// occurs in Chrome.
+
+
 class UtilityMethods{
 
   String BaseUrl = "http://v2.rovermd.com:7788/api";
+  final corsAnywhereUrl = 'https://cors-anywhere.herokuapp.com/';
 
   Widget getLogo(String imagePath, double _minimumPadding) {
     AssetImage assetImage = AssetImage(imagePath);
@@ -25,14 +38,15 @@ class UtilityMethods{
   Future<List<Gender>?> genderController() async {
     try {
       var jsonData = null;
-      Uri uri = Uri.parse("$BaseUrl/gender/find/all");
+      Uri uri = Uri.parse("$corsAnywhereUrl$BaseUrl/gender/find/all");
       // Uri uri = Uri.parse("$BaseUrl/gender/find/all");
       print(uri.toString());
       var response = await http.get(uri,
           headers: {
             'Content-Type': 'application/json',
             'Charset': 'utf-8',
-            'Access-Control-Allow-Origin': '*'
+            'origin': '*', // or specify the origin of your app
+            'x-requested-with': 'XMLHttpRequest'
           });
       // print("response---$response");
       if (response.statusCode == 200) {
@@ -53,12 +67,14 @@ class UtilityMethods{
   Future<List<Ethnicity>?> ethnicityController() async {
     try {
       var jsonData = null;
-      Uri uri = Uri.parse("$BaseUrl/ethnicity/all");
+      Uri uri = Uri.parse("$corsAnywhereUrl$BaseUrl/ethnicity/all");
       print(uri.toString());
       var response = await http.get(uri,
           headers: {
             'Content-Type': 'application/json',
-            'Charset': 'utf-8'
+            'Charset': 'utf-8',
+            'origin': '*', // or specify the origin of your app
+            'x-requested-with': 'XMLHttpRequest'
           });
       // print(response);
       if (response.statusCode == 200) {
@@ -79,12 +95,14 @@ class UtilityMethods{
   Future<List<Race>?> raceController() async {
     try {
       var jsonData = null;
-      Uri uri = Uri.parse("$BaseUrl/race/all");
+      Uri uri = Uri.parse("$corsAnywhereUrl$BaseUrl/race/all");
       print(uri.toString());
       var response = await http.get(uri,
           headers: {
             'Content-Type': 'application/json',
-            'Charset': 'utf-8'
+            'Charset': 'utf-8',
+            'origin': '*', // or specify the origin of your app
+            'x-requested-with': 'XMLHttpRequest'
           });
       // print(response);
       if (response.statusCode == 200) {
@@ -104,13 +122,15 @@ class UtilityMethods{
 
   Future<List<PriInsurance>?> priInsController(String payerName, int tenantId) async {
     try {
-      String BaseUrl = "http://v2.rovermd.com:8080/api/professionalpayer/find/max";
+      String BaseUrl = "${corsAnywhereUrl}http://v2.rovermd.com:8080/api/professionalpayer/find/max";
       var jsonData = null;
       Uri uri = Uri.parse("$BaseUrl/$payerName");
       final headers ={
         'Content-Type': 'application/json',
         'Charset': 'utf-8',
-        'X-TenantID': '$tenantId'
+        'X-TenantID': '$tenantId',
+        'origin': '*', // or specify the origin of your app
+        'x-requested-with': 'XMLHttpRequest'
       };
       print("URI HERE-- "+uri.toString());
       var response = await http.get(uri,
@@ -135,11 +155,13 @@ class UtilityMethods{
   Future<String?> registerPatient(Map<String, dynamic> patientInfo) async{
     String message = "";
     try {
-      Uri uri = Uri.parse("http://v2.rovermd.com:8484/patient/register");
+      Uri uri = Uri.parse("${corsAnywhereUrl}http://v2.rovermd.com:8484/patient/register");
       var response = await http.post(uri,
           headers: {
             'Content-Type': 'application/json',
-            'Charset': 'utf-8'
+            'Charset': 'utf-8',
+            'origin': '*', // or specify the origin of your app
+            'x-requested-with': 'XMLHttpRequest'
           },
           body: jsonEncode(patientInfo));
           // body: jsonString);

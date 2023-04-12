@@ -93,106 +93,99 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin{
           position: Tween<Offset>(begin: Offset(0, 1), end: Offset(.0, .0))
               .animate(_animationController),
           child: Container(
-            // alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width > 600 ? MediaQuery.of(context).size.width - 600 : MediaQuery.of(context).size.width,
-            margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
-            child: Stack(
-              // alignment: Alignment.center,
+            padding: EdgeInsets.only(left: 20.0, right: 20.0),
+            alignment: Alignment.center,
+            width: MediaQuery.of(context).size.width,//- 50.w,
+            height: MediaQuery.of(context).size.height,// - 50.h,
+            //width: MediaQuery.of(context).size.width > 600 ? MediaQuery.of(context).size.width - 600 : MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(left: 10.0, right: 10.0),
+            child: ListView(
+              shrinkWrap: true,
               children: <Widget>[
-                ListView(
-                  children: <Widget>[
-                    Padding(padding: EdgeInsets.only(top: 40.0)),
-                    utilityMethods.getLogo('images/logo_black.png', 4.0),
-                    Padding(padding: EdgeInsets.only(top: 30.0)),
-                    Padding(
-                        padding: EdgeInsets.only(
-                            top: 5.0, bottom: 5.0),
-                        child: TextFormField(
-                          controller: userIdController,
-                          decoration: InputDecoration(
-                              labelText: 'User ID',
-                              labelStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14.0),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  borderSide: new BorderSide(
-                                      color: Colors.grey, width: 1.0))
+                Padding(padding: EdgeInsets.only(top: 10.0)),
+                utilityMethods.getLogo('images/logo_black.png', 4.0),
+                // Padding(padding: EdgeInsets.only(top: 10.0)),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 5.0, bottom: 5.0),
+                    child: TextFormField(
+                      controller: userIdController,
+                      decoration: InputDecoration(
+                          labelText: 'User ID',
+                          labelStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              borderSide: new BorderSide(
+                                  color: Colors.grey, width: 1.0))
+                      ),
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 5.0, bottom: 5.0),
+                    child: TextFormField(
+                      obscureText: _isHide,
+                      controller: pwdController,
+                      decoration: InputDecoration(
+                          labelText: 'Password',
+                          labelStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14.0),
+                          suffix: InkWell(
+                            onTap: _togglePasswordView,
+                            child: Icon(
+                              _isHide ? Icons.visibility : Icons.visibility_off,
+                            ),
                           ),
-                        )),
-                    Padding(
-                        padding: EdgeInsets.only(
-                            top: 5.0, bottom: 5.0),
-                        child: TextFormField(
-                          obscureText: _isHide,
-                          controller: pwdController,
-                          decoration: InputDecoration(
-                              labelText: 'Password',
-                              labelStyle: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14.0),
-                              suffix: InkWell(
-                                onTap: _togglePasswordView,
-                                child: Icon(
-                                  _isHide ? Icons.visibility : Icons.visibility_off,
-                                ),
-                              ),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  borderSide: new BorderSide(
-                                      color: Colors.grey, width: 1.0))),
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: 10.0, bottom: 5.0),
-                      child: Container(
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0),),
-                            gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [
-                                  Color(0xffEBC248),
-                                  Color(0xffEBA223),
-                                ]),
-                          ),
-                          child: ElevatedButton(
-                              onPressed: () async{
-                                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => PersonalInfoRegister()), (Route<dynamic> route) => false);
-                                FocusScope.of(context).unfocus();
-                                String userId = userIdController.text;//EncryptDecrypt.encryptAES(userIdController.text);
-                                String pwd = pwdController.text;//EncryptDecrypt.encryptAES(pwdController.text);
-                                // print(userId);
-                                // print(pwd);
-                                // if(userId == "" || pwd == ""){
-                                //   EasyLoading.showError("Enter user details to login");
-                                //   return;
-                                // }else {
-                                //   // utilityMethods.login(
-                                //   //     userId,
-                                //   //     pwd, context);
-                                //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => PersonalInfoRegister()), (Route<dynamic> route) => false);
-                                // }
-                              },
-                              child: Text('SIGN IN',
-                                  style: TextStyle(color: Colors.black)),
-                              style: ElevatedButton.styleFrom(
-                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  primary: Colors.transparent,
-                                  shadowColor: Colors.transparent,
-                                  elevation: 0,
-                                  textStyle: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold
-                                  )))),
-                    ),
-                  ],
-                ),
-                Container(
-                    alignment: Alignment.bottomCenter,
-                    padding: EdgeInsets.only(bottom: 15.0),
-                    child: Text("Designed and Maintained by RoverMD",
-                      textAlign: TextAlign.center,)
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              borderSide: new BorderSide(
+                                  color: Colors.grey, width: 1.0))),
+                    )),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 10.0, bottom: 5.0),
+                  child: Container(
+                      decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0),),
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Color(0xffEBC248),
+                              Color(0xffEBA223),
+                            ]),
+                      ),
+                      child: ElevatedButton(
+                          onPressed: () async{
+                            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => PersonalInfoRegister()), (Route<dynamic> route) => false);
+                            FocusScope.of(context).unfocus();
+                            String userId = userIdController.text;//EncryptDecrypt.encryptAES(userIdController.text);
+                            String pwd = pwdController.text;//EncryptDecrypt.encryptAES(pwdController.text);
+                            // print(userId);
+                            // print(pwd);
+                            // if(userId == "" || pwd == ""){
+                            //   EasyLoading.showError("Enter user details to login");
+                            //   return;
+                            // }else {
+                            //   // utilityMethods.login(
+                            //   //     userId,
+                            //   //     pwd, context);
+                            //   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => PersonalInfoRegister()), (Route<dynamic> route) => false);
+                            // }
+                          },
+                          child: Text('SIGN IN',
+                              style: TextStyle(color: Colors.black)),
+                          style: ElevatedButton.styleFrom(
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              primary: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              elevation: 0,
+                              textStyle: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold
+                              )))),
                 ),
               ],
             ),

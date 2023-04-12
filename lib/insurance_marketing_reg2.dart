@@ -748,6 +748,7 @@ class _InsuranceAndMarketingRegisterState extends State<InsuranceAndMarketingReg
                                         ),
                                         actions: [
                                           Container(
+
                                             decoration: ShapeDecoration(
                                               shape: StadiumBorder(),
                                               gradient: LinearGradient(
@@ -820,7 +821,10 @@ class _InsuranceAndMarketingRegisterState extends State<InsuranceAndMarketingReg
           )
       ),
       body: Container(
-        height: MediaQuery. of(context). size. height,
+        padding: EdgeInsets.only(left: 20.0, right: 20.0),
+        // alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width,//- 50.w,
+        height: MediaQuery.of(context).size.height,// - 50.h,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,

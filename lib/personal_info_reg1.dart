@@ -7,10 +7,7 @@ import 'package:rovermd/Model/ethnicity_race_model.dart';
 import 'package:rovermd/insurance_marketing_reg2.dart';
 import 'package:rovermd/login.dart';
 import 'package:rovermd/utility_methods.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-
 import 'Model/gender_model.dart';
-
 
 UtilityMethods utilityMethods = new UtilityMethods();
 class PersonalInfoRegister extends StatefulWidget {
@@ -83,12 +80,6 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
         this.race = race;
       });
     });
-
-    // firstNameFocusNode.addListener(() {
-    //   if (firstNameFocusNode.hasFocus) {
-    //     KeyboardVisibilityController().focus(firstNameFocusNode);
-    //   }
-    // });
 
   }
 
@@ -546,13 +537,11 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
 
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: showExitPopup,
-        child: Scaffold(
+        child:Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: AppBar(
             title: Text("PERSONAL INFO",
@@ -712,9 +701,13 @@ class _PersonalInfoRegisterState extends State<PersonalInfoRegister> {
               ],
             )
           ),
-          body: Container(
+          body:
+          Container(
+            padding: EdgeInsets.only(left: 20.0, right: 20.0),
             // alignment: Alignment.center,
-            width: MediaQuery.of(context).size.width > 600 ? MediaQuery.of(context).size.width - 600 : MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width,//- 50.w,
+            height: MediaQuery.of(context).size.height,// - 50.h,
+            //width: MediaQuery.of(context).size.width > 600 ? MediaQuery.of(context).size.width - 600 : MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
